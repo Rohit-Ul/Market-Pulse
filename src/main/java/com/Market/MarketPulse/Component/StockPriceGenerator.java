@@ -22,7 +22,7 @@ import jakarta.persistence.Id;
 public class StockPriceGenerator {
 
 	@Autowired
-	@Qualifier("simpleAlgo")  
+	@Qualifier("gbmAlgo")  
 	StockPriceSimulate simulate;
 	
 	private static final Random rand= new Random();
@@ -33,22 +33,24 @@ public class StockPriceGenerator {
 		for(int i=0;i<stocks.size();i++) {
 			
 			BigDecimal price =stocks.get(i).getPrice() ;
-			stocks.get(i).setPrice(simulate.FindNewPrice(price));
+			BigDecimal newPrice = simulate.FindNewPrice(price);
+			stocks.get(i).setPrice(newPrice);
 			
-			stocks.get(i).setChange(simulate.FindChange(stocks.get(i).getChange()));
+			stocks.get(i).setChange(simulate.FindChange(price,newPrice));
 			
 			stocks.get(i).setVolume(simulate.FinVolume(stocks.get(i).getVolume()));
 			
-			stocks.get(i).setHigh(simulate.FindHigh(price));
+			stocks.get(i).setHigh(simulate.FindHigh(price,newPrice));
 			
-			stocks.get(i).setLow(simulate.FindLow(price));
+			stocks.get(i).setLow(simulate.FindLow(price,newPrice));
 			
 			String timestamp =ZonedDateTime.now(ZoneId.of("UTC")).toString();
 			stocks.get(i).setTimestamp(timestamp);
 			
-			System.out.println(stocks+"/n");
+			System.out.println(stocks.get(i)+"/n");
 			
 		}
+		System.out.println("/n");
 		
 	}
 }

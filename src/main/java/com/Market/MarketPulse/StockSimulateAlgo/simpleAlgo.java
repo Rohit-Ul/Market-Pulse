@@ -29,7 +29,7 @@
 			return result.setScale(2, RoundingMode.HALF_UP);
 		}
 	
-		public BigDecimal FindChange(BigDecimal prevPrice) {
+		public BigDecimal FindChange(BigDecimal prevPrice,BigDecimal newPrice) {
 			BigDecimal changeFactor = BigDecimal.valueOf(random.nextDouble() * 0.04 - 0.02);
 			return changeFactor.setScale(2, RoundingMode.HALF_UP);
 		}
@@ -41,13 +41,13 @@
 		}
 	
 		
-		public BigDecimal FindHigh(BigDecimal prevPrice) {
+		public BigDecimal FindHigh(BigDecimal prevPrice,BigDecimal newPrice) {
 			
 			return FindNewPrice(prevPrice.add(BigDecimal.valueOf(5 + random.nextDouble() * 10))).setScale(2, RoundingMode.HALF_UP);
 		}
 	
 	
-		public BigDecimal FindLow(BigDecimal prevPrice) {
+		public BigDecimal FindLow(BigDecimal prevPrice,BigDecimal newPrice) {
 			
 			return FindNewPrice(prevPrice.subtract(BigDecimal.valueOf(3 + random.nextDouble() * 7))).setScale(2, RoundingMode.HALF_UP);
 		}
