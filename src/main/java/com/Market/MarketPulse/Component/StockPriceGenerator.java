@@ -39,26 +39,42 @@ public class StockPriceGenerator {
 		for(int i=0;i<stocks.size();i++) {
 			
 			BigDecimal price =stocks.get(i).getPrice() ;
+			
+
+			
+			String symbol =stocks.get(i).getSymbol();
 			BigDecimal newPrice = simulate.FindNewPrice(price);
-			stocks.get(i).setPrice(newPrice);
+			BigDecimal change=simulate.FindChange(price,newPrice);
+			Integer volume=simulate.FinVolume(stocks.get(i).getVolume());
+			BigDecimal high=simulate.FindHigh(price,newPrice);
+			BigDecimal low=simulate.FindLow(price,newPrice);
+			ZonedDateTime timestamp=ZonedDateTime.now(ZoneId.of("UTC"));
 			
-			stocks.get(i).setChange(simulate.FindChange(price,newPrice));
-			
-			stocks.get(i).setVolume(simulate.FinVolume(stocks.get(i).getVolume()));
-			
-			stocks.get(i).setHigh(simulate.FindHigh(price,newPrice));
-			
-			stocks.get(i).setLow(simulate.FindLow(price,newPrice));
-			
-			ZonedDateTime timestamp =ZonedDateTime.now(ZoneId.of("UTC"));
-			stocks.get(i).setTimestamp(timestamp);
+			StockInfo stock= new StockInfo(symbol,newPrice,change,volume,high,low);
 			
 			System.out.println(stocks.get(i)+"/n");
-			stockdata.add(stocks.get(i));
+			stockdata.add(stock);
 		}
 		
 		priceAggregator.addTick(stockdata);
+		stockdata.clear();
 		System.out.println("/n");
+		
+		
+		
+//		stocks.get(i).setPrice(newPrice);
+//		
+//		stocks.get(i).setChange(simulate.FindChange(price,newPrice));
+//		
+//		stocks.get(i).setVolume(simulate.FinVolume(stocks.get(i).getVolume()));
+//		
+//		stocks.get(i).setHigh(simulate.FindHigh(price,newPrice));
+//		
+//		stocks.get(i).setLow(simulate.FindLow(price,newPrice));
+//		
+//		ZonedDateTime timestamp =ZonedDateTime.now(ZoneId.of("UTC"));
+//		
+//		stocks.get(i).setTimestamp(timestamp);
 		
 	}
 

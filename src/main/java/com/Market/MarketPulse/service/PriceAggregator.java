@@ -34,9 +34,13 @@ public class PriceAggregator {
 	public void aggregateAndStore() {
 		tickBuffer.forEach((symbol,symbolList) -> {
 			if(!symbolList.isEmpty()) {
+				
+				System.out.println(symbol + " buffer Fetched . Size now: " + symbolList.size());
 				OhlcvBar ohlcv = ComputeOHLCV(symbol,symbolList);
+				System.out.println(ohlcv);
 				symbolList.clear(); // Reset for next minute
-                System.out.println(ohlcv);
+				System.out.println(symbol + " buffer cleared. Size now: " + symbolList.size());
+                
 			}
 		});
 		
@@ -49,6 +53,7 @@ public class PriceAggregator {
 		BigDecimal Open = symbolList.get(0).getPrice();
 		
 		Instant alignedMinute = symbolList.get(0).getTimestamp().toInstant().truncatedTo(ChronoUnit.MINUTES);
+		symbolList.forEach(tick -> System.out.println("  " + tick.getTimestamp() + " = " + tick.getPrice()));
 		
 		BigDecimal High = symbolList.stream().map(StockInfo::getPrice).max(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
 		
