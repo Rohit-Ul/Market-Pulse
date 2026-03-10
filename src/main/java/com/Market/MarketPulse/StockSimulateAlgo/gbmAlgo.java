@@ -73,11 +73,10 @@ public class gbmAlgo implements StockPriceSimulate{
 		
 		BigDecimal change = newPrice.subtract(prevPrice); // Note: this will be ~0
 		
-		System.out.println("Prices :"+prevPrice+" | "+newPrice+" | Chnage in Price :"+change);
 		BigDecimal pchange = change
 						      .multiply(BigDecimal.valueOf(100))
 				              .divide(prevPrice,4,RoundingMode.HALF_UP).setScale(2, RoundingMode.HALF_UP);
-		System.out.println("Chnage Percentage in Price :"+pchange);
+		
 		return pchange;
 	}
 

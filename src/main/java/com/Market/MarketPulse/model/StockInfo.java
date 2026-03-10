@@ -5,6 +5,8 @@ import java.sql.Time;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import org.springframework.stereotype.Component;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -21,7 +23,7 @@ import jakarta.persistence.Id;
 }
 		
  */
-@Entity
+
 public class StockInfo {
 	
 	public StockInfo(String symbol, BigDecimal price, BigDecimal change, Integer volume, BigDecimal high,BigDecimal low) {
@@ -32,7 +34,7 @@ public class StockInfo {
 		this.volume = volume;
 		this.high = high;
 		this.low = low;
-		this.timestamp = ZonedDateTime.now(ZoneId.of("UTC")).toString();
+		this.timestamp = ZonedDateTime.now(ZoneId.of("UTC"));
 	}
 
 	@Id
@@ -43,7 +45,7 @@ public class StockInfo {
 	Integer volume;
 	BigDecimal high;
 	BigDecimal low;
-	String timestamp;
+	ZonedDateTime timestamp;
 	
 	public String getSymbol() {
 		return symbol;
@@ -81,10 +83,10 @@ public class StockInfo {
 	public void setLow(BigDecimal low) {
 		this.low = low;
 	}
-	public String getTimestamp() {
+	public ZonedDateTime getTimestamp() {
 		return timestamp;
 	}
-	public void setTimestamp(String timestamp) {
+	public void setTimestamp(ZonedDateTime timestamp) {
 		this.timestamp = timestamp;
 	}
 	

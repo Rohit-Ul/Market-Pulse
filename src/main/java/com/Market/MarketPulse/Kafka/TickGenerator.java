@@ -29,15 +29,16 @@ public class TickGenerator {
 			        52345678,                  // ✅ Autoboxing
 			        new BigDecimal("448.20"),
 			        new BigDecimal("442.10")
-			    ),
-           
-			// ✅ Corrected versions:
-		    new StockInfo("HDFCBANK", 
-		    			new BigDecimal("1567.50"), 
-		    		    new BigDecimal("18.20"), 
-		    		    28456789, 
-		    		    new BigDecimal("1582.00"), 
-		    		    new BigDecimal("1545.30"))
+			    )
+//			,
+//           
+//			// ✅ Corrected versions:
+//		    new StockInfo("HDFCBANK", 
+//		    			new BigDecimal("1567.50"), 
+//		    		    new BigDecimal("18.20"), 
+//		    		    28456789, 
+//		    		    new BigDecimal("1582.00"), 
+//		    		    new BigDecimal("1545.30"))
         );
 	
 //	public void GenerateTickPrice(String stock, StockInfo info) {
@@ -47,7 +48,7 @@ public class TickGenerator {
 	@Scheduled(fixedRate = 5000)
 	public void PriceChange() {
 		
-		PriceGenerator.ChangePrice(StockList);
+		PriceGenerator.SimulateStocks(StockList);
 	}
 	
 }

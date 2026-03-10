@@ -1,0 +1,65 @@
+package com.Market.MarketPulse.service;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
+import com.Market.MarketPulse.Component.OhlcvBar;
+import com.Market.MarketPulse.model.StockInfo;
+
+@Service
+public class PriceAggregator {
+	private final Map<String, List<StockInfo>> tickBuffer =new ConcurrentHashMap<>();
+
+	// Called By Your StockPriceGenerator for every 5sec as Tick Generates New Value
+	public void addTick(List<StockInfo> stocks) {
+		
+		for(int i=0;i<stocks.size();i++) {
+			
+			tickBuffer.computeIfAbsent(stocks.get(i).getSymbol(), k->new ArrayList<>()).add(stocks.get(i));
+		}
+	}
+	
+	// afte 1 Minute it will be pushed to DB 
+	@Scheduled(fixedDelay = 30000)
+	public void aggregateAndStore() {
+		tickBuffer.forEach((symbol,symbolList) -> {
+			if(!symbolList.isEmpty()) {
+				OhlcvBar ohlcv = ComputeOHLCV(symbol,symbolList);
+				symbolList.clear(); // Reset for next minute
+                System.out.println(ohlcv);
+			}
+		});
+		
+	}
+	
+	public OhlcvBar ComputeOHLCV(String symbol,List<StockInfo> symbolList ) {
+		
+		symbolList.sort(Comparator.comparing(StockInfo::getTimestamp));
+		
+		BigDecimal Open = symbolList.get(0).getPrice();
+		
+		Instant alignedMinute = symbolList.get(0).getTimestamp().toInstant().truncatedTo(ChronoUnit.MINUTES);
+		
+		BigDecimal High = symbolList.stream().map(StockInfo::getPrice).max(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
+		
+		BigDecimal Low = symbolList.stream().map(StockInfo::getPrice).min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
+		
+		BigDecimal Close = symbolList.get(symbolList.size()-1).getPrice();
+		
+		long Volume = symbolList.stream().mapToLong(StockInfo::getVolume).sum();
+		
+		return new OhlcvBar(symbol,alignedMinute,Open, High, Low,Close, Volume);
+	}
+	
+	
+}

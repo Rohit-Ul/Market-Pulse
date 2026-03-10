@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import java.sql.Time;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.Market.MarketPulse.StockSimulateAlgo.StockPriceSimulate;
 import com.Market.MarketPulse.model.StockInfo;
+import com.Market.MarketPulse.service.PriceAggregator;
 
 import jakarta.persistence.Id;
 
@@ -24,11 +26,15 @@ public class StockPriceGenerator {
 	@Autowired
 	@Qualifier("gbmAlgo")  
 	StockPriceSimulate simulate;
+
+	@Autowired 
+	PriceAggregator priceAggregator;
 	
 	private static final Random rand= new Random();
 	
-	public void ChangePrice(List<StockInfo> stocks) {
+	public void SimulateStocks(List<StockInfo> stocks) {
 		
+		List<StockInfo> stockdata = new ArrayList<>();
 		
 		for(int i=0;i<stocks.size();i++) {
 			
@@ -44,13 +50,17 @@ public class StockPriceGenerator {
 			
 			stocks.get(i).setLow(simulate.FindLow(price,newPrice));
 			
-			String timestamp =ZonedDateTime.now(ZoneId.of("UTC")).toString();
+			ZonedDateTime timestamp =ZonedDateTime.now(ZoneId.of("UTC"));
 			stocks.get(i).setTimestamp(timestamp);
 			
 			System.out.println(stocks.get(i)+"/n");
-			
+			stockdata.add(stocks.get(i));
 		}
+		
+		priceAggregator.addTick(stockdata);
 		System.out.println("/n");
 		
 	}
+
+	
 }

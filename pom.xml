@@ -30,7 +30,12 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
-		
+		<dependency>
+		    <groupId>com.yahoofinance-api</groupId>
+		    <artifactId>YahooFinanceAPI</artifactId>
+		    <version>3.17.0</version>
+		    <scope>compile</scope>
+		</dependency>
 		<dependency>
 		    <groupId>org.springframework.kafka</groupId>
 		    <artifactId>spring-kafka</artifactId>
