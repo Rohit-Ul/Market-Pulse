@@ -6,7 +6,8 @@ public record AlertRequest(
 		Integer userId,
 		String symbol,
 		BigDecimal low,
-		BigDecimal high
+		BigDecimal high,
+		String alertType
 		) {
 
 }

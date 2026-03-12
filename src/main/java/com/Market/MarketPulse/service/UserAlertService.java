@@ -25,12 +25,13 @@ public class UserAlertService {
 		Req.setSymbol(alert.symbol());
 		Req.setLow(alert.low());
 		Req.setHigh(alert.high());
+		Req.setAlertType(alert.alertType());
 		Req.setStatus("A");
 		Req.setCreate_Time(ZonedDateTime.now(ZoneId.of("UTC")));
 		
 		repo.save(Req);
 		
-		AlertResponse response = new AlertResponse(alert.symbol(),alert.low(),alert.high());
+		AlertResponse response = new AlertResponse(alert.symbol(),alert.low(),alert.high(),alert.alertType());
 		return response;
 	}
 }

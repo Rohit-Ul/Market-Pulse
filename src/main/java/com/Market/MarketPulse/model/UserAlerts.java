@@ -12,6 +12,8 @@ import jakarta.persistence.Id;
 @Entity
 public class UserAlerts {
 
+
+
 	@Id
 	@GeneratedValue(strategy =GenerationType.UUID)
 	UUID id;
@@ -20,21 +22,24 @@ public class UserAlerts {
 	
 	String symbol;
 	
-	BigDecimal High;
+	BigDecimal high;
 	
 	BigDecimal Low;
+	
+	String alertType;
 	
 	String status;
 	
 	ZonedDateTime create_Time;
 
-	public UserAlerts(UUID id, Integer userId, String symbol, BigDecimal high, BigDecimal low, String status,
+	public UserAlerts(UUID id, Integer userId, String symbol, BigDecimal high, BigDecimal low,String alertType, String status,
 			ZonedDateTime create_Time) {
 		this.id = id;
 		this.userId = userId;
 		this.symbol = symbol;
-		this.High = high;
+		this.high = high;
 		this.Low = low;
+		this.alertType= alertType;
 		this.status = status;
 		this.create_Time = create_Time;
 	}
@@ -68,11 +73,11 @@ public class UserAlerts {
 	}
 
 	public BigDecimal getHigh() {
-		return High;
+		return high;
 	}
 
 	public void setHigh(BigDecimal high) {
-		High = high;
+		high = high;
 	}
 
 	public BigDecimal getLow() {
@@ -82,7 +87,15 @@ public class UserAlerts {
 	public void setLow(BigDecimal low) {
 		Low = low;
 	}
+	
+	public String getAlertType() {
+		return alertType;
+	}
 
+	public void setAlertType(String alertType) {
+		this.alertType = alertType;
+	}
+	
 	public String getStatus() {
 		return status;
 	}
