@@ -1,15 +1,30 @@
-package com.Market.MarketPulse.Component;
+package com.Market.MarketPulse.model;
 
 import java.math.BigDecimal;
 
 import java.time.Instant;
 
-import org.springframework.stereotype.Component;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 
 import java.lang.String;
 
-//POJO Object
+@Entity
+@Table(name = "ohlcv_bars", indexes = {@Index(columnList = "symbol, timestamp")})
 public class OhlcvBar {
+	@Override
+	public String toString() {
+		return "OhlcvBar [Id=" + Id + ", symbol=" + symbol + ", timestamp=" + timestamp + ", open=" + open + ", high="
+				+ high + ", low=" + low + ", close=" + close + ", volume=" + volume + "]";
+	}
+
+	@Id
+	@GeneratedValue(strategy =GenerationType.IDENTITY)
+	Integer Id;
 	String symbol;
 	Instant timestamp;
 	BigDecimal open,high,low,close;
@@ -26,7 +41,13 @@ public class OhlcvBar {
 		this.volume = volume;
 	}
 	
-
+	
+	public long getId() {
+		return Id;
+	}
+	public void setId(Integer id) {
+		this.Id = id;
+	}
 	public String getSymbol() {
 		return symbol;
 	}
@@ -79,15 +100,9 @@ public class OhlcvBar {
 		return volume;
 	}
 
-	public void setVolume(long volume) {
+	public void setVolume(long pvolume) {
 		this.volume = volume;
 	}
-	
 
-	@Override
-	public String toString() {
-		return "OhlcvBar [symbol=" + symbol + ", timestamp=" + timestamp + ", open=" + open + ", high=" + high
-				+ ", low=" + low + ", close=" + close + ", volume=" + volume + "]";
-	}
-	
+
 }

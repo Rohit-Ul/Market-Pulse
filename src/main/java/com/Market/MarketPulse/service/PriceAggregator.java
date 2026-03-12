@@ -10,14 +10,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.Market.MarketPulse.Component.OhlcvBar;
+import com.Market.MarketPulse.model.OhlcvBar;
 import com.Market.MarketPulse.model.StockInfo;
+import com.Market.MarketPulse.repo.PriceBarRepo;
 
 @Service
 public class PriceAggregator {
+	
+	@Autowired
+	PriceBarRepo priceBarRepo;
+	
 	private final Map<String, List<StockInfo>> tickBuffer =new ConcurrentHashMap<>();
 
 	// Called By Your StockPriceGenerator for every 5sec as Tick Generates New Value
@@ -30,14 +36,18 @@ public class PriceAggregator {
 	}
 	
 	// afte 1 Minute it will be pushed to DB 
-	@Scheduled(fixedDelay = 30000)
+	@Scheduled(fixedDelay = 60000)
 	public void aggregateAndStore() {
 		tickBuffer.forEach((symbol,symbolList) -> {
 			if(!symbolList.isEmpty()) {
 				
 				System.out.println(symbol + " buffer Fetched . Size now: " + symbolList.size());
 				OhlcvBar ohlcv = ComputeOHLCV(symbol,symbolList);
+				
+				priceBarRepo.save(ohlcv);
 				System.out.println(ohlcv);
+				
+				
 				symbolList.clear(); // Reset for next minute
 				System.out.println(symbol + " buffer cleared. Size now: " + symbolList.size());
                 
@@ -53,6 +63,7 @@ public class PriceAggregator {
 		BigDecimal Open = symbolList.get(0).getPrice();
 		
 		Instant alignedMinute = symbolList.get(0).getTimestamp().toInstant().truncatedTo(ChronoUnit.MINUTES);
+		
 		symbolList.forEach(tick -> System.out.println("  " + tick.getTimestamp() + " = " + tick.getPrice()));
 		
 		BigDecimal High = symbolList.stream().map(StockInfo::getPrice).max(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
