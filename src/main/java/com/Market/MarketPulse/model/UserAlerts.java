@@ -11,9 +11,6 @@ import jakarta.persistence.Id;
 
 @Entity
 public class UserAlerts {
-
-
-
 	@Id
 	@GeneratedValue(strategy =GenerationType.UUID)
 	UUID id;
@@ -22,7 +19,7 @@ public class UserAlerts {
 	
 	String symbol;
 	
-	BigDecimal high;
+	BigDecimal High;
 	
 	BigDecimal Low;
 	
@@ -37,7 +34,7 @@ public class UserAlerts {
 		this.id = id;
 		this.userId = userId;
 		this.symbol = symbol;
-		this.high = high;
+		this.High = high;
 		this.Low = low;
 		this.alertType= alertType;
 		this.status = status;
@@ -73,11 +70,11 @@ public class UserAlerts {
 	}
 
 	public BigDecimal getHigh() {
-		return high;
+		return High;
 	}
 
 	public void setHigh(BigDecimal high) {
-		high = high;
+		this.High = high;
 	}
 
 	public BigDecimal getLow() {
@@ -85,7 +82,7 @@ public class UserAlerts {
 	}
 
 	public void setLow(BigDecimal low) {
-		Low = low;
+		this.Low = low;
 	}
 	
 	public String getAlertType() {

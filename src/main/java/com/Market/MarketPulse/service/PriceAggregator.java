@@ -24,6 +24,9 @@ public class PriceAggregator {
 	@Autowired
 	PriceBarRepo priceBarRepo;
 	
+	@Autowired 
+	UserAlertService alertService;
+	
 	private final Map<String, List<StockInfo>> tickBuffer =new ConcurrentHashMap<>();
 
 	// Called By Your StockPriceGenerator for every 5sec as Tick Generates New Value
@@ -41,15 +44,16 @@ public class PriceAggregator {
 		tickBuffer.forEach((symbol,symbolList) -> {
 			if(!symbolList.isEmpty()) {
 				
-				System.out.println(symbol + " buffer Fetched . Size now: " + symbolList.size());
+				//System.out.println(symbol + " buffer Fetched . Size now: " + symbolList.size());
 				OhlcvBar ohlcv = ComputeOHLCV(symbol,symbolList);
 				
 				priceBarRepo.save(ohlcv);
-				System.out.println(ohlcv);
+				System.out.println("Symbol :"+ohlcv.getSymbol()+" | Closing Price :"+ohlcv.getClose());
 				
+				alertService.CheckUserAlerts(ohlcv.getSymbol(),ohlcv.getClose());
 				
 				symbolList.clear(); // Reset for next minute
-				System.out.println(symbol + " buffer cleared. Size now: " + symbolList.size());
+				//System.out.println(symbol + " buffer cleared. Size now: " + symbolList.size());
                 
 			}
 		});

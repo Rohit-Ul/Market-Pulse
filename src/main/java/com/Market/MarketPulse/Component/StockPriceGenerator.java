@@ -52,29 +52,13 @@ public class StockPriceGenerator {
 			
 			StockInfo stock= new StockInfo(symbol,newPrice,change,volume,high,low);
 			
-			System.out.println(stocks.get(i)+"/n");
+			//System.out.println(stocks.get(i)+"/n");
 			stockdata.add(stock);
 		}
 		
 		priceAggregator.addTick(stockdata);
 		stockdata.clear();
-		System.out.println("/n");
-		
-		
-		
-//		stocks.get(i).setPrice(newPrice);
-//		
-//		stocks.get(i).setChange(simulate.FindChange(price,newPrice));
-//		
-//		stocks.get(i).setVolume(simulate.FinVolume(stocks.get(i).getVolume()));
-//		
-//		stocks.get(i).setHigh(simulate.FindHigh(price,newPrice));
-//		
-//		stocks.get(i).setLow(simulate.FindLow(price,newPrice));
-//		
-//		ZonedDateTime timestamp =ZonedDateTime.now(ZoneId.of("UTC"));
-//		
-//		stocks.get(i).setTimestamp(timestamp);
+		System.out.println("🦖🦖🦖");
 		
 	}
 
