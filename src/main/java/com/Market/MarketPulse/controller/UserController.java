@@ -1,5 +1,7 @@
 package com.Market.MarketPulse.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,4 +29,13 @@ public class UserController {
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(Resposnse);
 	}
+	
+	@PostMapping("/addBulkAlert")
+	public ResponseEntity<List<AlertResponse>> AddBulkUserAlerts(@RequestBody List<AlertRequest> alert) {
+		List<AlertResponse> Resposnse=Alertservice.AddBulkUserAlert(alert);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(Resposnse);
+	}
+	
+	
 }

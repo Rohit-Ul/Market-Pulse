@@ -68,7 +68,7 @@ public class PriceAggregator {
 		
 		Instant alignedMinute = symbolList.get(0).getTimestamp().toInstant().truncatedTo(ChronoUnit.MINUTES);
 		
-		symbolList.forEach(tick -> System.out.println("  " + tick.getTimestamp() + " = " + tick.getPrice()));
+		//symbolList.forEach(tick -> System.out.println("  " + tick.getTimestamp() + " = " + tick.getPrice()));
 		
 		BigDecimal High = symbolList.stream().map(StockInfo::getPrice).max(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
 		

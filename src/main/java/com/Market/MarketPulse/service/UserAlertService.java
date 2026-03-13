@@ -63,4 +63,30 @@ public class UserAlertService {
 		System.out.println("Alerts Triggered ⏰⏰--"+Notify);
 		return Notify;
 	}
+
+
+	public List<AlertResponse> AddBulkUserAlert(List<AlertRequest> alerts) {
+		// TODO Auto-generated method stub
+		
+		List<AlertResponse> AlertsReq =new ArrayList<>();
+		for(int i=0;i<alerts.size();i++) {
+			
+			UserAlerts Req=new UserAlerts();
+			
+			Req.setUserId(alerts.get(i).userId());
+			Req.setSymbol(alerts.get(i).symbol());
+			Req.setLow(alerts.get(i).low());
+			Req.setHigh(alerts.get(i).high());
+			Req.setAlertType(alerts.get(i).alertType());
+			Req.setStatus("A");
+			Req.setCreate_Time(ZonedDateTime.now(ZoneId.of("UTC")));
+			
+			repo.save(Req);
+			
+			AlertResponse response = new AlertResponse(alerts.get(i).symbol(),alerts.get(i).low(),alerts.get(i).high(),alerts.get(i).alertType());
+			AlertsReq.add(response);
+		}
+		
+		return AlertsReq;
+	}
 }
