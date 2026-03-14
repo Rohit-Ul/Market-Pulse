@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.Market.MarketPulse.dto.AlertRequest;
@@ -20,6 +21,9 @@ public class UserAlertService {
 	
 	@Autowired
 	UserAlertRepo repo;
+	
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
 	
 	public AlertResponse AddUserAlert(AlertRequest alert) {
 		
@@ -58,6 +62,9 @@ public class UserAlertService {
 			NotifyAlert Notice= new NotifyAlert(Alerts.get(i).getUserId(),alert);
 			
 			Notify.add(Notice);
+			
+			// 🔥 SEND TO FRONTEND INSTANTLY
+	        messagingTemplate.convertAndSend("/topic/alerts", Notice);
 		}
 		Alerts.clear();
 		System.out.println("Alerts Triggered ⏰⏰--"+Notify);
