@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.Market.MarketPulse.StockSimulateAlgo.StockPriceSimulate;
+import com.Market.MarketPulse.dto.OhlcvWebSocketDto;
+import com.Market.MarketPulse.model.OhlcvBar;
 import com.Market.MarketPulse.model.StockInfo;
 import com.Market.MarketPulse.service.PriceAggregator;
 
@@ -54,7 +56,9 @@ public class StockPriceGenerator {
 			
 			//System.out.println(stocks.get(i)+"/n");
 			stockdata.add(stock);
+			
 		}
+		
 		
 		priceAggregator.addTick(stockdata);
 		stockdata.clear();

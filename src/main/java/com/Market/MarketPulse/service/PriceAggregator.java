@@ -11,15 +11,20 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.Market.MarketPulse.dto.OhlcvWebSocketDto;
 import com.Market.MarketPulse.model.OhlcvBar;
 import com.Market.MarketPulse.model.StockInfo;
 import com.Market.MarketPulse.repo.PriceBarRepo;
 
 @Service
 public class PriceAggregator {
+	
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
 	
 	@Autowired
 	PriceBarRepo priceBarRepo;
@@ -35,6 +40,16 @@ public class PriceAggregator {
 		for(int i=0;i<stocks.size();i++) {
 			
 			tickBuffer.computeIfAbsent(stocks.get(i).getSymbol(), k->new ArrayList<>()).add(stocks.get(i));
+			
+			if(stocks.get(i).getSymbol().equals("ITC")) {
+	            // 🔥 ITC ONLY - No forEach!
+	            List<StockInfo> itcTicks = tickBuffer.get("ITC");
+	            if(itcTicks != null && !itcTicks.isEmpty()) {
+	                OhlcvBar ohlcv = ComputeOHLCV("ITC", itcTicks);
+	                OhlcvWebSocketDto dto = new OhlcvWebSocketDto(ohlcv);
+	                messagingTemplate.convertAndSend("/topic/ohlcv/ITC", dto);
+	            }
+	        }
 		}
 	}
 	
