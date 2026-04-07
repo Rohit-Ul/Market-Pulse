@@ -1,6 +1,6 @@
 <div align="center">
 
-# 📈 Real-Time Stock Simulation Engine
+# 📈 Real-Time Stock Price Tracking System
 
 **A Spring Boot application simulating real-time stock price fluctuations for 50 scripts using Brownian Motion, with WebSocket-based live streaming, OHLCV aggregation, and a user alert system.**
 
